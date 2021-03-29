@@ -1,9 +1,9 @@
 <!--
  * @Description: 介绍
  * @Author: chenyongxuan
- * @Date: 2021-03-29 15:32:21
+ * @Date: 2021-03-29 15:09:45
  * @LastEditors: chenyongxuan
- * @LastEditTime: 2021-03-29 17:18:12
+ * @LastEditTime: 2021-03-29 18:35:02
 -->
 <template>
   <div id="wrapper">
@@ -11,21 +11,16 @@
     <main>
       <div class="left-side">
         <span class="title">
-          Welcome to easy-pwd!
+          History Password
         </span>
-        <p>
-          Make password easier
-        </p>
-        <system-information></system-information>
       </div>
 
       <div class="right-side">
         <div class="doc">
-          <div class="title">Getting Started</div>
-
-          <!-- <InputMagFrom @create-success="createSuccess" /> -->
-          <!-- <div>{{ res.des }}: {{ res.pwdRes }}</div> -->
-          <Login />
+          <div class="title">Make your password</div>
+          <InputMagFrom style="margin: 20px" @create-success="createSuccess" />
+          <!-- <el-button @click="Save">Save</el-button> -->
+          <el-button @click="loginOut">Sign out</el-button>
         </div>
       </div>
     </main>
@@ -33,12 +28,11 @@
 </template>
 
 <script>
-import SystemInformation from './LandingPage/SystemInformation'
-import Login from './LandingPage/Login'
+import InputMagFrom from './InputMsg/InputMagFrom.vue'
 
 export default {
   name: 'landing-page',
-  components: { SystemInformation, Login },
+  components: { InputMagFrom },
   data() {
     return {
       res: {
@@ -53,9 +47,14 @@ export default {
     },
     createSuccess(res) {
       this.res = { ...res }
+    },
+    loginOut() {
+      this.$router.push({ name: 'landing-page' })
     }
   }
 }
 </script>
 
-<style></style>
+<style lang="scss" scoped>
+
+</style>
