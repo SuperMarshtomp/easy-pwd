@@ -3,7 +3,7 @@
  * @Author: chenyongxuan
  * @Date: 2021-03-29 15:09:45
  * @LastEditors: chenyongxuan
- * @LastEditTime: 2021-03-29 18:35:02
+ * @LastEditTime: 2021-03-30 18:54:48
 -->
 <template>
   <div id="wrapper">
@@ -18,7 +18,7 @@
       <div class="right-side">
         <div class="doc">
           <div class="title">Make your password</div>
-          <InputMagFrom style="margin: 20px" @create-success="createSuccess" />
+          <InputMagFrom @create-success="createSuccess" />
           <!-- <el-button @click="Save">Save</el-button> -->
           <el-button @click="loginOut">Sign out</el-button>
         </div>

@@ -3,7 +3,7 @@
  * @Author: chenyongxuan
  * @Date: 2021-03-29 14:44:38
  * @LastEditors: chenyongxuan
- * @LastEditTime: 2021-03-29 18:08:01
+ * @LastEditTime: 2021-03-30 19:01:03
 -->
 <template>
   <main>
@@ -17,11 +17,18 @@
             <el-button @click="create">Make</el-button>
           </div>
           <template v-if="resPwd">
-            <div style="line-height: 120px">
-              <span>{{ resPwd }} </span
-              ><el-link :underline="false" @click="copy">Copy</el-link>
+            <div style="line-height: 20px">
+              <el-form-item label="Result: " prop="result" label-width="50">
+                <span>{{ resPwd }}&nbsp;&nbsp;</span
+                ><el-link
+                  :underline="false"
+                  @click="copy"
+                  style="font-size: 12px;vertical-align: baseline;"
+                  >Copy</el-link
+                >
+              </el-form-item>
             </div>
-            <div style="margin-top: 40px">
+            <div>
               <el-button style="float: bottom" @click="save">Save</el-button>
             </div>
           </template>
@@ -33,7 +40,7 @@
         direction="vertical"
         :active="active"
         finish-status="success"
-        style="height: 300px"
+        style="height: 200px"
         class="left-side"
       >
         <el-step title="Make"></el-step>
@@ -92,6 +99,7 @@ export default {
 <style lang="scss" scoped>
 main {
   height: 400px;
+  margin: 10px 0;
   .left-side {
     flex-basis: 70%;
   }

@@ -3,13 +3,16 @@
  * @Author: chenyongxuan
  * @Date: 2021-03-29 15:04:46
  * @LastEditors: chenyongxuan
- * @LastEditTime: 2021-03-29 18:36:37
+ * @LastEditTime: 2021-03-30 17:50:37
  */
 import Datastore from 'nedb'
 import path from 'path'
 import { remote } from 'electron'
 
-export default (name) => new Datastore({
-  autoload: true,
-  filename: path.join(remote.app.getPath(name), '/data.db')
-})
+const userData = remote.app.getPath('userData')
+
+export default name =>
+  new Datastore({
+    autoload: true,
+    filename: path.join(userData, `/${name}.db`)
+  })

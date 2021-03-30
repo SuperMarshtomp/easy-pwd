@@ -12,10 +12,8 @@ import router from './router'
 import store from './store'
 import ElementUI, { Message } from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
-// import db from './datastore'
 
 Vue.use(ElementUI)
-// Vue.prototype.$db = db
 Vue.prototype.$message = Message
 
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))

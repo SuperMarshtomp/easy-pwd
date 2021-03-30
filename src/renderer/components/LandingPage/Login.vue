@@ -3,7 +3,7 @@
  * @Author: chenyongxuan
  * @Date: 2021-03-29 15:07:54
  * @LastEditors: chenyongxuan
- * @LastEditTime: 2021-03-29 18:42:14
+ * @LastEditTime: 2021-03-30 18:50:36
 -->
 <template>
   <el-form :model="ruleForm" :rules="rules" ref="ruleForm">
@@ -14,7 +14,9 @@
       <el-input type="password" v-model.trim="ruleForm.pwd"></el-input>
       <div class="tips">Please be sure to record your password</div>
     </el-form-item>
-    <el-button @click="login">{{ hasPwd ? 'Sign in' : 'Sign up' }}</el-button>
+    <el-button :loading="loading.login" @click="login"
+      >Sign in / Sign up</el-button
+    >
     <el-button @click="deletePwd">删除密码</el-button>
   </el-form>
 </template>
@@ -58,13 +60,16 @@ export default {
             trigger: 'blur'
           }
         ],
-        pwd: [{ validator: validatePass, trigger: 'change' }]
+        pwd: [{ validator: validatePass, trigger: 'blur' }]
       },
       ruleForm: {
         name: '',
         pwd: ''
       },
-      hasPwd: false
+      hasPwd: false,
+      loading: {
+        login: false
+      }
     }
   },
   computed: {},
@@ -77,59 +82,67 @@ export default {
   },
   methods: {
     login() {
-      const _this = this
-      this.$refs['ruleForm'].validateField('name', err => {
-        if (!err) {
-          Vue.prototype.$db = db(this.ruleForm.name)
-          console.log(this.$db)
-          this.$db.insert(
-            {
-              name: 'pwd',
-              value: this.ruleForm.pwd
-            },
-            function(err, newDoc) {
-              if (newDoc) {
-                console.log('newDoc: ', newDoc);
-                _this.$message.success('Please be sure to record your password')
-              } else if (err) {
-                console.log('err: ', err);
-                _this.$message.error(err)
+      this.loading.login = true
+      try {
+        const _this = this
+        this.$refs['ruleForm'].validateField('name', err => {
+          if (!err) {
+            const newdb = db(this.ruleForm.name)
+            newdb.findOne({ name: 'pwd' }, function(err, doc) {
+              if (!err && !doc) {
+                _this.$refs['ruleForm'].validateField('pwd', err => {
+                  if (!err) {
+                    _this
+                      .$confirm(
+                        'The user name is a new user. Do you want to sign up the new user?',
+                        'warning',
+                        {
+                          confirmButtonText: 'confirm',
+                          cancelButtonText: 'cancel',
+                          type: 'warning'
+                        }
+                      )
+                      .then(() => {
+                        Vue.prototype.$db = newdb
+                        _this.$db.insert(
+                          {
+                            name: 'pwd',
+                            value: _this.ruleForm.pwd
+                          },
+                          function(err, newDoc) {
+                            if (newDoc) {
+                              _this.$message.success(
+                                'Please be sure to record your password'
+                              )
+                            } else if (err) {
+                              _this.$message.error(err)
+                            }
+                          }
+                        )
+                        _this.$router.replace({ name: 'main-page' })
+                      })
+                      .catch(() => {})
+                  }
+                })
+              } else if (!err && doc) {
+                Vue.prototype.$db = newdb
+                _this.$refs['ruleForm'].validateField('pwd', err => {
+                  if (!err) {
+                    _this.$router.replace({ name: 'main-page' })
+                  }
+                })
               }
-            }
-          )
-
-          // this.$refs['ruleForm'].
-        }
-      })
-      // this.$refs['ruleForm'].validate(valid => {
-      //   if (valid) {
-      //     if (!this.hasPwd) {
-      //       this.$db.insert(
-      //         {
-      //           name: 'pwd',
-      //           value: this.ruleForm.pwd
-      //         },
-      //         function(err, newDoc) {
-      //           if (newDoc) {
-      //             _this.$message.success(
-      //               'Please be sure to record your password'
-      //             )
-      //           } else if (err) {
-      //             _this.$message.error(err)
-      //           }
-      //         }
-      //       )
-      //     }
-      //     this.$router.push({ name: 'main-page' })
-      //   } else {
-      //     console.log('error submit!!')
-      //     return false
-      //   }
-      // })
+            })
+          }
+        })
+      } catch (error) {
+      } finally {
+        this.loading.login = false
+      }
     },
     deletePwd() {
       this.$db.remove({ name: 'pwd' }, { multi: true }, function(err) {
-        console.log('err: ', err)
+        this.$message.error(err)
       })
     }
   }
@@ -141,5 +154,8 @@ export default {
   color: #909399;
   font-size: 12px;
   line-height: 13px;
+}
+.el-button {
+  margin-top: 10px;
 }
 </style>
