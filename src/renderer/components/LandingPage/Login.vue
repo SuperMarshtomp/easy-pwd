@@ -3,16 +3,20 @@
  * @Author: chenyongxuan
  * @Date: 2021-03-29 15:07:54
  * @LastEditors: chenyongxuan
- * @LastEditTime: 2021-03-30 18:50:36
+ * @LastEditTime: 2021-03-31 19:04:37
 -->
 <template>
   <el-form :model="ruleForm" :rules="rules" ref="ruleForm">
-    <el-form-item label="user's name" prop="name">
-      <el-input v-model.trim="ruleForm.name"></el-input>
+    <el-form-item label="用户名" prop="name">
+      <el-input v-model.trim="ruleForm.name" maxlength="32"></el-input>
     </el-form-item>
-    <el-form-item label="user's initial password" prop="pwd">
-      <el-input type="password" v-model.trim="ruleForm.pwd"></el-input>
-      <div class="tips">Please be sure to record your password</div>
+    <el-form-item label="密码" prop="pwd">
+      <el-input
+        type="password"
+        v-model.trim="ruleForm.pwd"
+        maxlength="64"
+      ></el-input>
+      <div class="tips">请牢记您的密码 (建议简单密码，密码不会记录)</div>
     </el-form-item>
     <el-button :loading="loading.login" @click="login"
       >Sign in / Sign up</el-button
@@ -81,7 +85,8 @@ export default {
     // })
   },
   methods: {
-    login() {
+    async login() {
+      await this.$store.dispatch('createUserData', { name: '', pwd: '' })
       this.loading.login = true
       try {
         const _this = this
@@ -119,7 +124,10 @@ export default {
                             }
                           }
                         )
-                        _this.$router.replace({ name: 'main-page' })
+                        _this.$store.dispatch('createUserData', _this.ruleForm)
+                        setTimeout(() => {
+                          _this.$router.replace({ name: 'main-page' })
+                        }, 100)
                       })
                       .catch(() => {})
                   }
@@ -128,7 +136,10 @@ export default {
                 Vue.prototype.$db = newdb
                 _this.$refs['ruleForm'].validateField('pwd', err => {
                   if (!err) {
-                    _this.$router.replace({ name: 'main-page' })
+                    _this.$store.dispatch('createUserData', _this.ruleForm)
+                    setTimeout(() => {
+                      _this.$router.replace({ name: 'main-page' })
+                    }, 100)
                   }
                 })
               }
@@ -153,7 +164,7 @@ export default {
 .tips {
   color: #909399;
   font-size: 12px;
-  line-height: 13px;
+  line-height: 16px;
 }
 .el-button {
   margin-top: 10px;

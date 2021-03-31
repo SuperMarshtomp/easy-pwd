@@ -3,13 +3,20 @@
  * @Author: chenyongxuan
  * @Date: 2021-03-29 15:32:21
  * @LastEditors: chenyongxuan
- * @LastEditTime: 2021-03-29 17:18:12
+ * @LastEditTime: 2021-03-31 18:38:58
 -->
 <template>
   <div id="wrapper">
     <!-- <img id="logo" src="~@/assets/logo.png" alt="electron-vue" /> -->
     <main>
       <div class="left-side">
+        <div class="doc">
+          <div class="title">Getting Started</div>
+          <Login />
+        </div>
+      </div>
+
+      <div class="right-side" style="padding-left: 30px">
         <span class="title">
           Welcome to easy-pwd!
         </span>
@@ -17,16 +24,6 @@
           Make password easier
         </p>
         <system-information></system-information>
-      </div>
-
-      <div class="right-side">
-        <div class="doc">
-          <div class="title">Getting Started</div>
-
-          <!-- <InputMagFrom @create-success="createSuccess" /> -->
-          <!-- <div>{{ res.des }}: {{ res.pwdRes }}</div> -->
-          <Login />
-        </div>
       </div>
     </main>
   </div>

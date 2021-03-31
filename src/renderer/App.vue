@@ -3,17 +3,58 @@
  * @Author: chenyongxuan
  * @Date: 2021-03-29 12:51:41
  * @LastEditors: chenyongxuan
- * @LastEditTime: 2021-03-29 17:04:48
+ * @LastEditTime: 2021-03-31 17:33:27
 -->
 <template>
   <div id="app">
-    <router-view></router-view>
+    <span class="menu">
+      <el-menu
+        :default-active="activeIndex"
+        :collapse="isCollapse"
+        :collapse-transition="false"
+        @select="goTo"
+      >
+        <el-menu-item index="landing-page">
+          <i class="el-icon-location"></i>
+          <span slot="title">首页</span>
+        </el-menu-item>
+        <el-menu-item index="main-page">
+          <i class="el-icon-setting"></i>
+          <span slot="title">生成密码</span>
+        </el-menu-item>
+        <el-menu-item index="search-page">
+          <i class="el-icon-search"></i>
+          <span slot="title">查找</span>
+        </el-menu-item>
+      </el-menu>
+    </span>
+    <span class="content">
+      <keep-alive>
+        <router-view></router-view>
+      </keep-alive>
+    </span>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'easy-pwd'
+  name: 'easy-pwd',
+  data() {
+    return {
+      isCollapse: true,
+      activeIndex: 'landing-page'
+    }
+  },
+  watch: {
+    '$route.name': function (val) {
+      this.activeIndex = val
+    }
+  },
+  methods: {
+    goTo(index) {
+      this.$router.replace({ name: index })
+    }
+  }
 }
 </script>
 
@@ -21,4 +62,24 @@ export default {
 /* CSS */
 @import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro');
 @import url('./assets/scss/main.scss');
+</style>
+<style lang="scss" scoped>
+.menu {
+  position: absolute;
+  z-index: 1000;
+  top: 0;
+  left: 0;
+}
+
+::v-deep .el-menu {
+  height: 100vh;
+  transition: all 0.3s ease;
+}
+.content {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 64px;
+  width: calc(100% - 64px);
+}
 </style>
