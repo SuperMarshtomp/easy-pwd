@@ -3,7 +3,7 @@
  * @Author: chenyongxuan
  * @Date: 2021-03-29 12:51:41
  * @LastEditors: chenyongxuan
- * @LastEditTime: 2021-03-31 17:33:27
+ * @LastEditTime: 2021-04-01 16:16:29
 -->
 <template>
   <div id="app">
@@ -37,6 +37,8 @@
 </template>
 
 <script>
+import footer from '../../algorithm-submodule/footer/index'
+import '../../algorithm-submodule/footer/footer.css'
 export default {
   name: 'easy-pwd',
   data() {
@@ -46,10 +48,16 @@ export default {
     }
   },
   watch: {
-    '$route.name': function (val) {
+    '$route.name': function(val) {
       this.activeIndex = val
     }
   },
+  created() {
+    let div = document.createElement('div')
+    div.innerHTML = footer
+    document.body.appendChild(div)
+  },
+  mounted() {},
   methods: {
     goTo(index) {
       this.$router.replace({ name: index })

@@ -1,9 +1,15 @@
+/*
+ * @Description: 介绍
+ * @Author: chenyongxuan
+ * @Date: 2021-03-31 18:26:27
+ * @LastEditors: chenyongxuan
+ * @LastEditTime: 2021-04-01 14:21:54
+ */
 'use strict'
 
 import { app, BrowserWindow } from 'electron'
 
 import '../renderer/store'
-import store from '../renderer/store'
 
 /**
  * Set `__static` path to static files in production
@@ -41,7 +47,6 @@ function createWindow() {
 app.on('ready', createWindow)
 
 app.on('window-all-closed', () => {
-  store.commit('CREATE_USER_DATA', { name: '', pwd: '' })
   if (process.platform !== 'darwin') {
     app.quit()
   }
