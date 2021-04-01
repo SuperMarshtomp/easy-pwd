@@ -3,7 +3,7 @@
  * @Author: chenyongxuan
  * @Date: 2021-03-29 15:09:45
  * @LastEditors: chenyongxuan
- * @LastEditTime: 2021-03-31 18:51:03
+ * @LastEditTime: 2021-03-31 19:20:24
 -->
 <template>
   <div v-if="showPage" id="wrapper">
@@ -41,7 +41,6 @@ export default {
     }
   },
   activated() {
-    console.log(this.$store.state.User.name);
     if (!this.$store.state.User.name) {
       this.$message.warning('请先登录')
       this.showPage = false

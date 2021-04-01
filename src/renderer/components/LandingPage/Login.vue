@@ -3,7 +3,7 @@
  * @Author: chenyongxuan
  * @Date: 2021-03-29 15:07:54
  * @LastEditors: chenyongxuan
- * @LastEditTime: 2021-03-31 19:04:37
+ * @LastEditTime: 2021-03-31 19:22:04
 -->
 <template>
   <el-form :model="ruleForm" :rules="rules" ref="ruleForm">
@@ -67,8 +67,7 @@ export default {
         pwd: [{ validator: validatePass, trigger: 'blur' }]
       },
       ruleForm: {
-        name: '',
-        pwd: ''
+        ...this.$store.state.User
       },
       hasPwd: false,
       loading: {
@@ -77,13 +76,7 @@ export default {
     }
   },
   computed: {},
-  created() {
-    // const _this = this
-    // this.$db.findOne({ name: 'pwd' }, function(err, docs) {
-    //   if (err) _this.$message.error(err)
-    //   _this.hasPwd = docs !== null
-    // })
-  },
+  mounted() {},
   methods: {
     async login() {
       await this.$store.dispatch('createUserData', { name: '', pwd: '' })
@@ -99,11 +92,11 @@ export default {
                   if (!err) {
                     _this
                       .$confirm(
-                        'The user name is a new user. Do you want to sign up the new user?',
-                        'warning',
+                        `用户名 ${_this.ruleForm.name} 为新用户，是否创建该用户？`,
+                        '提示',
                         {
-                          confirmButtonText: 'confirm',
-                          cancelButtonText: 'cancel',
+                          confirmButtonText: '确定',
+                          cancelButtonText: '取消',
                           type: 'warning'
                         }
                       )

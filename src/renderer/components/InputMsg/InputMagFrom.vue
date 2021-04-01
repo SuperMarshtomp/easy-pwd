@@ -3,7 +3,7 @@
  * @Author: chenyongxuan
  * @Date: 2021-03-29 14:44:38
  * @LastEditors: chenyongxuan
- * @LastEditTime: 2021-03-31 18:06:39
+ * @LastEditTime: 2021-04-01 10:50:19
 -->
 <template>
   <el-form
@@ -74,7 +74,7 @@
 </template>
 
 <script>
-import getRandomPaasword from '../../utils/makePassword'
+import getRandomPaasword from '../../../../algorithm-submodule/generatedPassword'
 export default {
   data() {
     return {
@@ -153,10 +153,13 @@ export default {
       this.$message.success('Copy success')
     },
     save() {
-      this.$refs['ruleForm'].validate(valid => {
-        if (valid) {
-        }
-      })
+      if (this.allowSymbol) {
+        this.$refs['ruleForm'].validateField('symbol', err => {
+          if (!err) {
+            // this.create()
+          }
+        })
+      } else this.create()
     }
   }
 }

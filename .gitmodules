@@ -1,0 +1,3 @@
+[submodule "algorithm-submodule"]
+	path = algorithm-submodule
+	url = git@github.com:SuperMarshtomp/algorithm-submodule.git
