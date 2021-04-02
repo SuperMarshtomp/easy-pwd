@@ -3,7 +3,7 @@
  * @Author: chenyongxuan
  * @Date: 2021-03-29 14:44:38
  * @LastEditors: chenyongxuan
- * @LastEditTime: 2021-04-02 18:00:01
+ * @LastEditTime: 2021-04-02 18:25:29
 -->
 <template>
   <el-form
@@ -62,7 +62,7 @@
       ><el-link
         :disabled="!resPwd"
         :underline="false"
-        @click="copy"
+        @click="copy(resPwd)"
         style="font-size: 12px;vertical-align: baseline;"
         >Copy</el-link
       >
@@ -75,9 +75,12 @@
 
 <script>
 import getRandomPaasword from '../../../../algorithm-submodule/generatedPassword'
+import { copy } from '../../../utils/copy'
+
 export default {
   data() {
     return {
+      copy,
       rules: {
         des: [
           {
@@ -147,11 +150,6 @@ export default {
         this.pwdRules.find(row => row.name === item)
       )
       this.resPwd = getRandomPaasword(this.ruleForm.num, rules)
-    },
-    copy() {
-      const { clipboard } = require('electron')
-      clipboard.writeText(this.resPwd)
-      this.$message.success('Copy success')
     },
     async save() {
       try {
