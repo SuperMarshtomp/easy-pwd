@@ -104,6 +104,7 @@ export default {
                         Vue.prototype.$db = newdb
                         _this.$db.insert(
                           {
+                            type: 'login',
                             name: 'pwd',
                             value: _this.ruleForm.pwd
                           },

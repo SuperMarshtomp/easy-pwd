@@ -3,7 +3,7 @@
  * @Author: chenyongxuan
  * @Date: 2021-03-29 12:51:41
  * @LastEditors: chenyongxuan
- * @LastEditTime: 2021-03-31 17:39:29
+ * @LastEditTime: 2021-04-02 16:13:27
  */
 import Vue from 'vue'
 import Router from 'vue-router'
@@ -26,6 +26,11 @@ export default new Router({
       path: '/main',
       name: 'main-page',
       component: require('@/components/MainPage.vue').default
+    },
+    {
+      path: '/search',
+      name: 'search-page',
+      component: require('@/components/SearchPage.vue').default
     }
   ]
 })

@@ -3,7 +3,7 @@
  * @Author: chenyongxuan
  * @Date: 2021-03-29 12:51:41
  * @LastEditors: chenyongxuan
- * @LastEditTime: 2021-04-01 16:16:29
+ * @LastEditTime: 2021-04-02 15:38:40
 -->
 <template>
   <div id="app">
@@ -56,6 +56,15 @@ export default {
     let div = document.createElement('div')
     div.innerHTML = footer
     document.body.appendChild(div)
+    this.$nextTick(() => {
+      const svg = document.getElementById('github-svg')
+      svg.style = 'cursor:pointer'
+      svg.addEventListener('click', function(event) {
+        event.preventDefault()
+        const { shell } = require('electron')
+        shell.openExternal('https://github.com/SuperMarshtomp/easy-pwd')
+      })
+    })
   },
   mounted() {},
   methods: {

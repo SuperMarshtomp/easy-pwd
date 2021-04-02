@@ -3,7 +3,7 @@
  * @Author: chenyongxuan
  * @Date: 2021-03-29 14:44:38
  * @LastEditors: chenyongxuan
- * @LastEditTime: 2021-04-01 10:50:19
+ * @LastEditTime: 2021-04-02 18:00:01
 -->
 <template>
   <el-form
@@ -131,14 +131,15 @@ export default {
     }
   },
   methods: {
-    make() {
+    async make() {
       this.$refs['ruleForm'].clearValidate()
       if (this.allowSymbol) {
-        this.$refs['ruleForm'].validateField('symbol', err => {
-          if (!err) {
-            this.create()
-          }
-        })
+        try {
+          await this.check('symbol')
+          this.create()
+        } catch (error) {
+          console.log('error: ', error)
+        }
       } else this.create()
     },
     create() {
@@ -152,14 +153,37 @@ export default {
       clipboard.writeText(this.resPwd)
       this.$message.success('Copy success')
     },
-    save() {
-      if (this.allowSymbol) {
-        this.$refs['ruleForm'].validateField('symbol', err => {
-          if (!err) {
-            // this.create()
-          }
+    async save() {
+      try {
+        await this.check('des')
+        if (this.allowSymbol) await this.check('symbol')
+        const now = new Date().toString()
+        this.$db.insert({
+          type: 'save-msg',
+          ...this.ruleForm,
+          pwd: this.resPwd,
+          created: now,
+          motify: now
         })
-      } else this.create()
+        this.$message.success('Save success')
+      } catch (error) {
+        console.log('error: ', error)
+      }
+    },
+    async check(type) {
+      return new Promise((resolve, reject) => {
+        try {
+          this.$refs['ruleForm'].validateField(type, err => {
+            if (!err) {
+              resolve('success')
+            } else {
+              reject(new Error(err))
+            }
+          })
+        } catch (error) {
+          reject(error)
+        }
+      })
     }
   }
 }

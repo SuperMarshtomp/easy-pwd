@@ -41,7 +41,7 @@ export default {
     }
   },
   activated() {
-    if (!this.$store.state.User.name) {
+    if (!this.$store.state.User.name || !this.$db) {
       this.$message.warning('请先登录')
       this.showPage = false
       this.$router.replace({ name: 'landing-page' })
