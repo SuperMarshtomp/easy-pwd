@@ -7,13 +7,15 @@
  */
 const state = {
   name: '',
-  pwd: ''
+  pwd: '',
+  savePwd: false
 }
 
 const mutations = {
   CREATE_USER_DATA(state, data) {
     state.name = data.name
     state.pwd = data.pwd
+    state.savePwd = data.savePwd
   }
 }
 

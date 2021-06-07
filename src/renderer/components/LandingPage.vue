@@ -3,7 +3,7 @@
  * @Author: chenyongxuan
  * @Date: 2021-03-29 15:32:21
  * @LastEditors: chenyongxuan
- * @LastEditTime: 2021-03-31 18:38:58
+ * @LastEditTime: 2021-06-07 17:33:08
 -->
 <template>
   <div id="wrapper">
@@ -31,7 +31,7 @@
 
 <script>
 import SystemInformation from './LandingPage/SystemInformation'
-import Login from './LandingPage/Login'
+import Login from './LandingPage/Login.vue'
 
 export default {
   name: 'landing-page',

@@ -3,7 +3,7 @@
  * @Author: chenyongxuan
  * @Date: 2021-03-29 15:07:54
  * @LastEditors: chenyongxuan
- * @LastEditTime: 2021-03-31 19:22:04
+ * @LastEditTime: 2021-06-07 17:54:41
 -->
 <template>
   <el-form :model="ruleForm" :rules="rules" ref="ruleForm">
@@ -16,7 +16,10 @@
         v-model.trim="ruleForm.pwd"
         maxlength="64"
       ></el-input>
-      <div class="tips">请牢记您的密码 (建议简单密码，密码不会记录)</div>
+      <div class="tips">请牢记您的密码 (建议简单密码)</div>
+    </el-form-item>
+    <el-form-item prop="savePwd">
+      <el-checkbox v-model="ruleForm.savePwd">记住密码</el-checkbox>
     </el-form-item>
     <el-button :loading="loading.login" @click="login"
       >Sign in / Sign up</el-button
@@ -67,9 +70,10 @@ export default {
         pwd: [{ validator: validatePass, trigger: 'blur' }]
       },
       ruleForm: {
-        ...this.$store.state.User
+        ...this.$store.state.User,
+        pwd: this.$store.state.User.savePwd ? this.$store.state.User.pwd : '',
+        savePwd: this.$store.state.User.savePwd || false
       },
-      hasPwd: false,
       loading: {
         login: false
       }
@@ -79,7 +83,11 @@ export default {
   mounted() {},
   methods: {
     async login() {
-      await this.$store.dispatch('createUserData', { name: '', pwd: '' })
+      await this.$store.dispatch('createUserData', {
+        name: '',
+        pwd: '',
+        savePwd: false
+      })
       this.loading.login = true
       try {
         const _this = this
@@ -106,7 +114,8 @@ export default {
                           {
                             type: 'login',
                             name: 'pwd',
-                            value: _this.ruleForm.pwd
+                            value: _this.ruleForm.pwd,
+                            savePwd: _this.ruleForm.savePwd
                           },
                           function(err, newDoc) {
                             if (newDoc) {
@@ -158,7 +167,8 @@ export default {
 .tips {
   color: #909399;
   font-size: 12px;
-  line-height: 16px;
+  line-height: 14px;
+  margin-top: 4px;
 }
 .el-button {
   margin-top: 10px;
