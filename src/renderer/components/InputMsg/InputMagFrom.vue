@@ -3,7 +3,7 @@
  * @Author: chenyongxuan
  * @Date: 2021-03-29 14:44:38
  * @LastEditors: chenyongxuan
- * @LastEditTime: 2021-04-02 18:25:29
+ * @LastEditTime: 2021-06-08 17:54:28
 -->
 <template>
   <el-form
@@ -64,8 +64,8 @@
         :underline="false"
         @click="copy(resPwd)"
         style="font-size: 12px;vertical-align: baseline;"
-        >Copy</el-link
-      >
+        ><i class="el-icon-copy-document"
+      /></el-link>
     </el-form-item>
     <el-form-item>
       <el-button :disabled="!resPwd" @click="save">Save</el-button>
@@ -201,6 +201,9 @@ main {
   .el-textarea .el-input__count {
     background: inherit;
     bottom: -28px;
+  }
+  .el-link.el-link--default {
+    color: #409eff;
   }
 }
 </style>

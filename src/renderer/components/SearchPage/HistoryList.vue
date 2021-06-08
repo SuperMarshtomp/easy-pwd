@@ -3,14 +3,7 @@
  * @Author: chenyongxuan
  * @Date: 2021-04-02 16:03:03
  * @LastEditors: chenyongxuan
- * @LastEditTime: 2021-06-08 17:40:43
--->
-<!--
- * @Description: 介绍
- * @Author: chenyongxuan
- * @Date: 2021-03-29 14:44:38
- * @LastEditors: chenyongxuan
- * @LastEditTime: 2021-04-02 15:52:58
+ * @LastEditTime: 2021-06-08 17:50:49
 -->
 <template>
   <div>
@@ -43,7 +36,7 @@
                 :disabled="!item.name"
                 type="text"
                 @click="copy(item.name)"
-                >Copy</el-button
+                ><i class="el-icon-copy-document" /></el-button
               ></el-form-item
             >
             <el-form-item label="密码:"
@@ -52,7 +45,7 @@
                 :disabled="!item.pwd"
                 type="text"
                 @click="copy(item.pwd)"
-                >Copy</el-button
+                ><i class="el-icon-copy-document" /></el-button
               ></el-form-item
             >
             <el-form-item label="创建日期:">{{ item.created }}</el-form-item>
@@ -70,10 +63,10 @@
             @click="deletePwd(item)"
             type="text"
             style="padding: 0;color: red"
-            >Delete</el-button
+            ><i class="el-icon-delete" /></el-button
           >
           <el-button @click="copy(item.pwd)" type="text" style="padding: 0;"
-            >Copy paasword</el-button
+            ><i class="el-icon-copy-document" /></el-button
           ></span
         >
       </el-col>
