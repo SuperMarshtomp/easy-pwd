@@ -3,7 +3,7 @@
  * @Author: chenyongxuan
  * @Date: 2021-04-02 16:03:03
  * @LastEditors: chenyongxuan
- * @LastEditTime: 2021-04-02 18:10:34
+ * @LastEditTime: 2021-06-08 17:40:43
 -->
 <!--
  * @Description: 介绍
@@ -66,7 +66,10 @@
           >
         </el-popover>
         <span style="float: right;line-height: 18px; display: inline-block">
-          <el-button @click="deletePwd(item)" type="text" style="padding: 0;color: red"
+          <el-button
+            @click="deletePwd(item)"
+            type="text"
+            style="padding: 0;color: red"
             >Delete</el-button
           >
           <el-button @click="copy(item.pwd)" type="text" style="padding: 0;"
@@ -92,11 +95,19 @@ export default {
   },
   mounted() {
     this.getList()
+    this.$ipcRenderer.on('read-reply', this.handleRead)
   },
   activated() {
     this.getList()
   },
+  destroyed() {
+    this.$ipcRenderer.removeListener('read-reply', this.handleRead)
+  },
   methods: {
+    handleRead(event, arg) {
+      if (arg.code === 'ENOENT') this.$message.error('导入失败')
+      else this.writeDb(arg)
+    },
     getList() {
       try {
         const _this = this
@@ -152,6 +163,25 @@ export default {
           })
         })
         .catch(() => {})
+    },
+    writeDb(arg) {
+      const data = JSON.parse(arg)
+      if (data.docs && data.docs.length > 0) {
+        for (let index = 0; index < data.docs.length; index++) {
+          const element = data.docs[index]
+          this.$db.update(
+            { _id: element._id },
+            element,
+            { upsert: true },
+            (err, numReplaced) => {
+              console.log('numReplaced: ', numReplaced)
+              console.log('err: ', err)
+            }
+          )
+        }
+      }
+      this.$message.success('导入成功')
+      this.getList()
     }
   }
 }
@@ -161,6 +191,7 @@ export default {
 ::v-deep {
   .el-form-item--mini.el-form-item {
     margin: 0;
+    font-size: 14px;
   }
   .el-form-item__label {
     font-weight: 600;

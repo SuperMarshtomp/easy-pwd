@@ -3,7 +3,7 @@
  * @Author: chenyongxuan
  * @Date: 2021-03-29 15:07:54
  * @LastEditors: chenyongxuan
- * @LastEditTime: 2021-06-07 17:54:41
+ * @LastEditTime: 2021-06-08 17:33:19
 -->
 <template>
   <el-form :model="ruleForm" :rules="rules" ref="ruleForm">
@@ -24,13 +24,14 @@
     <el-button :loading="loading.login" @click="login"
       >Sign in / Sign up</el-button
     >
-    <el-button @click="deletePwd">删除密码</el-button>
+    <!-- <el-button @click="deletePwd">删除密码</el-button> -->
   </el-form>
 </template>
 
 <script>
 import Vue from 'vue'
 import db from '../../datastore'
+import md5 from 'blueimp-md5'
 export default {
   data() {
     var validatePass = (rule, value, callback) => {
@@ -39,12 +40,12 @@ export default {
       } else {
         if (!this.$db) callback()
         else {
-          this.$db.findOne({ name: 'pwd' }, function(err, docs) {
+          this.$db.findOne({ name: 'pwd' }, (err, docs) => {
             if (err) {
               callback(new Error(err))
             }
             if (docs) {
-              if (value !== docs.value) {
+              if (md5(value) !== docs.value && value !== docs.value) {
                 callback(
                   new Error(
                     'The password you entered is incorrect .Please try again'
@@ -114,7 +115,7 @@ export default {
                           {
                             type: 'login',
                             name: 'pwd',
-                            value: _this.ruleForm.pwd,
+                            value: md5(_this.ruleForm.pwd),
                             savePwd: _this.ruleForm.savePwd
                           },
                           function(err, newDoc) {

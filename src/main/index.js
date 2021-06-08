@@ -3,11 +3,11 @@
  * @Author: chenyongxuan
  * @Date: 2021-03-31 18:26:27
  * @LastEditors: chenyongxuan
- * @LastEditTime: 2021-04-01 14:21:54
+ * @LastEditTime: 2021-06-08 16:32:32
  */
 'use strict'
 
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, ipcMain } from 'electron'
 
 import '../renderer/store'
 
@@ -56,4 +56,25 @@ app.on('activate', () => {
   if (mainWindow === null) {
     createWindow()
   }
+})
+var fs = require('fs')
+
+ipcMain.on('async-write', (event, arg = { url: '', docs: {} }) => {
+  fs.writeFile(arg.url, JSON.stringify(arg.data), 'utf8', err => {
+    if (err) {
+      event.sender.send('write-reply', err)
+    } else {
+      event.sender.send('write-reply', '导出成功')
+    }
+  })
+})
+
+ipcMain.on('async-read', function(event, url) {
+  fs.readFile(url, 'utf8', (err, data) => {
+    if (err) {
+      event.sender.send('read-reply', '读取失败')
+    } else {
+      event.sender.send('read-reply', data)
+    }
+  })
 })

@@ -26,6 +26,7 @@
     "postinstall": "npm run lint:fix"
   },
   "dependencies": {
+    "blueimp-md5": "^2.18.0",
     "element-ui": "^2.15.1",
     "nedb": "^1.8.0",
     "vue": "^2.5.16",

@@ -3,7 +3,7 @@
  * @Author: chenyongxuan
  * @Date: 2021-03-29 12:51:41
  * @LastEditors: chenyongxuan
- * @LastEditTime: 2021-04-02 15:38:40
+ * @LastEditTime: 2021-06-08 17:26:02
 -->
 <template>
   <div id="app">
@@ -66,7 +66,12 @@ export default {
     //   })
     // })
   },
-  mounted() {},
+  mounted() {
+    this.$ipcRenderer.on('write-reply', (event, arg) => {
+      if (arg.code === 'ENOENT') this.$message.error('导出失败')
+      else this.$message.success('导出成功')
+    })
+  },
   methods: {
     goTo(index) {
       this.$router.replace({ name: index })
