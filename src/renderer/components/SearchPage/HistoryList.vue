@@ -3,13 +3,13 @@
  * @Author: chenyongxuan
  * @Date: 2021-04-02 16:03:03
  * @LastEditors: chenyongxuan
- * @LastEditTime: 2021-06-10 11:37:38
+ * @LastEditTime: 2021-06-10 12:57:57
 -->
 <template>
   <div>
     <el-input
       style="margin: 10px 0"
-      placeholder="请输入备注或用户名关键字查询"
+      placeholder="请输入描述、标签或用户名关键字查询"
       suffix-icon="el-icon-search"
       v-model="search.keyword"
       clearable
@@ -22,8 +22,8 @@
     <el-row :gutter="30">
       <el-col
         :xs="24"
-        :sm="12"
-        :xl="8"
+        :sm="24"
+        :xl="12"
         v-for="item in list"
         :key="item._id"
         style="margin: 10px 0"
@@ -38,7 +38,7 @@
               <span v-if="!item.editing">{{ item.name }}</span>
               <el-input
                 v-model="item.name"
-                style="width: 200px"
+                style="width: 250px"
                 maxlength="32"
                 v-else
               ></el-input>
@@ -52,7 +52,8 @@
               <span v-if="!item.editing">{{ item.pwd }}</span>
               <el-input
                 v-model.trim="item.pwd"
-                style="width: 200px"
+                style="width: 250px"
+                maxlength="64"
                 v-else
               ></el-input>
               <el-button
@@ -127,6 +128,14 @@
           >
         </el-popover>
         <span style="float: right;line-height: 18px; display: inline-block">
+          <el-tag
+            style="margin: 2px"
+            :key="tag"
+            v-for="tag in item.tags"
+            :disable-transitions="false"
+          >
+            {{ tag }}
+          </el-tag>
           <el-button
             @click="deletePwd(item)"
             type="text"
@@ -150,7 +159,16 @@ export default {
       copy,
       search: {
         keyword: ''
+      },
+      timer: null
+    }
+  },
+  watch: {
+    'search.keyword'(val, oldVal) {
+      if (this.timer !== null) {
+        clearTimeout(this.timer)
       }
+      this.timer = setTimeout(this.searchList, 250)
     }
   },
   mounted() {
@@ -193,7 +211,11 @@ export default {
             $and: [
               { type: 'save-msg' },
               {
-                $or: [{ des: { $regex: regex } }, { name: { $regex: regex } }]
+                $or: [
+                  { des: { $regex: regex } },
+                  { name: { $regex: regex } },
+                  { tagsKey: { $regex: regex } }
+                ]
               }
             ]
           })
@@ -252,7 +274,7 @@ export default {
       const now = new Date().toString()
       this.$db.update(
         { _id: item._id },
-        { ...item, motify: now },
+        { ...item, motify: now, tagsKey: item.tags.join(',') },
         { upsert: false },
         (err, numReplaced) => {
           if (numReplaced > 0) {

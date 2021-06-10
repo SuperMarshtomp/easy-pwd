@@ -3,7 +3,7 @@
  * @Author: chenyongxuan
  * @Date: 2021-03-29 12:51:41
  * @LastEditors: chenyongxuan
- * @LastEditTime: 2021-06-08 17:26:02
+ * @LastEditTime: 2021-06-10 14:58:29
 -->
 <template>
   <div id="app">
@@ -37,8 +37,8 @@
 </template>
 
 <script>
-// import footer from '../../algorithm-submodule/footer/index'
-// import '../../algorithm-submodule/footer/footer.css'
+import footer from '../../algorithm-submodule/footer/index'
+import '../../algorithm-submodule/footer/footer.css'
 export default {
   name: 'easy-pwd',
   data() {
@@ -53,18 +53,18 @@ export default {
     }
   },
   created() {
-    // let div = document.createElement('div')
-    // div.innerHTML = footer
-    // document.body.appendChild(div)
-    // this.$nextTick(() => {
-    //   const svg = document.getElementById('github-svg')
-    //   svg.style = 'cursor:pointer'
-    //   svg.addEventListener('click', function(event) {
-    //     event.preventDefault()
-    //     const { shell } = require('electron')
-    //     shell.openExternal('https://github.com/SuperMarshtomp/easy-pwd')
-    //   })
-    // })
+    let div = document.createElement('div')
+    div.innerHTML = footer
+    document.body.appendChild(div)
+    this.$nextTick(() => {
+      const svg = document.getElementById('github-svg')
+      svg.style = 'cursor:pointer'
+      svg.addEventListener('click', function(event) {
+        event.preventDefault()
+        const { shell } = require('electron')
+        shell.openExternal('https://github.com/SuperMarshtomp/easy-pwd')
+      })
+    })
   },
   mounted() {
     this.$ipcRenderer.on('write-reply', (event, arg) => {

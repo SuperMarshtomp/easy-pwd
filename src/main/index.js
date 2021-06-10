@@ -3,7 +3,7 @@
  * @Author: chenyongxuan
  * @Date: 2021-03-31 18:26:27
  * @LastEditors: chenyongxuan
- * @LastEditTime: 2021-06-08 16:32:32
+ * @LastEditTime: 2021-06-10 15:00:51
  */
 'use strict'
 
@@ -42,6 +42,8 @@ function createWindow() {
   mainWindow.on('closed', () => {
     mainWindow = null
   })
+
+  // mainWindow.webContents.openDevTools()
 }
 
 app.on('ready', createWindow)

@@ -3,7 +3,7 @@
  * @Author: chenyongxuan
  * @Date: 2021-03-29 15:09:45
  * @LastEditors: chenyongxuan
- * @LastEditTime: 2021-03-31 19:20:24
+ * @LastEditTime: 2021-06-10 12:55:53
 -->
 <template>
   <div v-if="showPage" id="wrapper">
@@ -60,7 +60,7 @@ export default {
 
 <style lang="scss" scoped>
 .doc {
-  width: 50%;
+  width: 60%;
   min-width: 300px;
 }
 </style>

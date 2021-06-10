@@ -3,7 +3,7 @@
  * @Author: chenyongxuan
  * @Date: 2021-03-29 14:44:38
  * @LastEditors: chenyongxuan
- * @LastEditTime: 2021-06-10 10:16:16
+ * @LastEditTime: 2021-06-10 12:52:54
 -->
 <template>
   <el-form
@@ -25,34 +25,6 @@
     </el-form-item>
     <el-form-item label="用户名" prop="name">
       <el-input v-model="ruleForm.name" maxlength="32"></el-input>
-    </el-form-item>
-    <el-form-item label="规则" prop="pwdRules">
-      <el-checkbox-group
-        v-model="ruleForm.pwdRules"
-        @change="$refs['ruleForm'].clearValidate()"
-      >
-        <el-checkbox-button
-          v-for="item in pwdRules"
-          :label="item.name"
-          :key="item.name"
-          >{{ item.label }}</el-checkbox-button
-        >
-      </el-checkbox-group>
-    </el-form-item>
-    <el-form-item label="允许符号" prop="symbol">
-      <el-input
-        @change="val => (pwdRules[3].value = val)"
-        :disabled="!allowSymbol"
-        v-model="ruleForm.symbol"
-      ></el-input>
-    </el-form-item>
-    <el-form-item label="位数" prop="num">
-      <el-input-number
-        v-model="ruleForm.num"
-        controls-position="right"
-        :min="6"
-        :max="32"
-      ></el-input-number>
     </el-form-item>
     <el-form-item label="标签" prop="tag">
       <el-tag
@@ -92,11 +64,40 @@
         </el-tooltip>
       </el-button>
     </el-form-item>
+    <el-form-item label="规则" prop="pwdRules">
+      <el-checkbox-group
+        v-model="ruleForm.pwdRules"
+        @change="$refs['ruleForm'].clearValidate()"
+      >
+        <el-checkbox-button
+          v-for="item in pwdRules"
+          :label="item.name"
+          :key="item.name"
+          >{{ item.label }}</el-checkbox-button
+        >
+      </el-checkbox-group>
+    </el-form-item>
+    <el-form-item label="允许符号" prop="symbol">
+      <el-input
+        @change="val => (pwdRules[3].value = val)"
+        :disabled="!allowSymbol"
+        v-model="ruleForm.symbol"
+      ></el-input>
+    </el-form-item>
+    <el-form-item label="位数" prop="num">
+      <el-input-number
+        v-model="ruleForm.num"
+        controls-position="right"
+        :min="6"
+        :max="32"
+      ></el-input-number>
+    </el-form-item>
+
     <el-form-item>
       <el-button @click="make">Make</el-button>
     </el-form-item>
     <el-form-item label="密码" prop="result" label-width="50">
-      <el-input v-model.trim="ruleForm.pwd" style="width: 200px"></el-input>
+      <el-input v-model.trim="ruleForm.pwd" style="width: 250px" maxlength="64"></el-input>
       &nbsp;&nbsp;<el-link
         :disabled="!ruleForm.pwd"
         :underline="false"
@@ -207,6 +208,7 @@ export default {
         this.$db.insert({
           type: 'save-msg',
           ...this.ruleForm,
+          tagsKey: this.ruleForm.tags.join(','),
           created: now,
           motify: now
         })
