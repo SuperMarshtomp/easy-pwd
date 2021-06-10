@@ -3,7 +3,7 @@
  * @Author: chenyongxuan
  * @Date: 2021-03-29 14:44:38
  * @LastEditors: chenyongxuan
- * @LastEditTime: 2021-06-08 17:54:28
+ * @LastEditTime: 2021-06-10 10:16:16
 -->
 <template>
   <el-form
@@ -54,21 +54,59 @@
         :max="32"
       ></el-input-number>
     </el-form-item>
+    <el-form-item label="标签" prop="tag">
+      <el-tag
+        :key="tag"
+        v-for="tag in ruleForm.tags"
+        closable
+        :disable-transitions="false"
+        @close="handleTagClose(tag)"
+      >
+        {{ tag }}
+      </el-tag>
+      <el-input
+        class="input-new-tag"
+        v-if="inputVisible"
+        v-model="inputValue"
+        ref="saveTagInput"
+        size="small"
+        @keyup.enter.native="handleInputConfirm"
+        @blur="handleInputConfirm"
+        maxlength="16"
+      >
+      </el-input>
+      <el-button
+        v-else
+        class="button-new-tag"
+        size="small"
+        @click="showInput"
+        :disabled="ruleForm.tags.length > 2"
+        >+ New Tag
+        <el-tooltip
+          class="item"
+          effect="dark"
+          content="最多允许输入三个标签"
+          placement="top"
+        >
+          <i class="el-icon-warning" />
+        </el-tooltip>
+      </el-button>
+    </el-form-item>
     <el-form-item>
       <el-button @click="make">Make</el-button>
     </el-form-item>
-    <el-form-item label="结果: " prop="result" label-width="50">
-      <span>{{ resPwd }}&nbsp;&nbsp;</span
-      ><el-link
-        :disabled="!resPwd"
+    <el-form-item label="密码" prop="result" label-width="50">
+      <el-input v-model.trim="ruleForm.pwd" style="width: 200px"></el-input>
+      &nbsp;&nbsp;<el-link
+        :disabled="!ruleForm.pwd"
         :underline="false"
-        @click="copy(resPwd)"
+        @click="copy(ruleForm.pwd)"
         style="font-size: 12px;vertical-align: baseline;"
         ><i class="el-icon-copy-document"
       /></el-link>
     </el-form-item>
     <el-form-item>
-      <el-button :disabled="!resPwd" @click="save">Save</el-button>
+      <el-button :disabled="!ruleForm.pwd" @click="save">Save</el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -94,6 +132,13 @@ export default {
             pattern: /^[!@#$%^&*?]*$/,
             message: '只能输入 !@#$%^&*? 中的字符'
           }
+        ],
+        pwd: [
+          {
+            required: true,
+            message: '请输入密码',
+            trigger: 'blur'
+          }
         ]
       },
       ruleForm: {
@@ -101,9 +146,10 @@ export default {
         num: 16,
         name: '',
         pwdRules: ['lower', 'upper', 'number', 'symbol'],
-        symbol: '!@#$%^&*?'
+        symbol: '!@#$%^&*?',
+        tags: [],
+        pwd: ''
       },
-      resPwd: '',
       pwdRules: [
         {
           name: 'lower',
@@ -125,7 +171,9 @@ export default {
           value: '!@#$%^&*?',
           label: '符号'
         }
-      ]
+      ],
+      inputVisible: false,
+      inputValue: ''
     }
   },
   computed: {
@@ -149,7 +197,7 @@ export default {
       const rules = this.ruleForm.pwdRules.map(item =>
         this.pwdRules.find(row => row.name === item)
       )
-      this.resPwd = getRandomPaasword(this.ruleForm.num, rules)
+      this.ruleForm.pwd = getRandomPaasword(this.ruleForm.num, rules)
     },
     async save() {
       try {
@@ -159,7 +207,6 @@ export default {
         this.$db.insert({
           type: 'save-msg',
           ...this.ruleForm,
-          pwd: this.resPwd,
           created: now,
           motify: now
         })
@@ -182,6 +229,25 @@ export default {
           reject(error)
         }
       })
+    },
+    handleTagClose(tag) {
+      this.ruleForm.tags.splice(this.ruleForm.tags.indexOf(tag), 1)
+    },
+
+    showInput() {
+      this.inputVisible = true
+      this.$nextTick(_ => {
+        this.$refs.saveTagInput.$refs.input.focus()
+      })
+    },
+
+    handleInputConfirm() {
+      let inputValue = this.inputValue
+      if (inputValue) {
+        this.ruleForm.tags.push(inputValue)
+      }
+      this.inputVisible = false
+      this.inputValue = ''
     }
   }
 }
@@ -205,5 +271,25 @@ main {
   .el-link.el-link--default {
     color: #409eff;
   }
+}
+.el-tag {
+  margin-right: 10px;
+}
+.el-tag {
+  margin-bottom: 8px;
+}
+.button-new-tag {
+  margin-right: 10px;
+  height: 32px;
+  line-height: 30px;
+  padding: 0 12px;
+  border-radius: 0.5em;
+  background: #409eff;
+  border: 1px solid #409eff;
+}
+.input-new-tag {
+  width: 90px;
+  margin-right: 10px;
+  vertical-align: top;
 }
 </style>
